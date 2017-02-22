@@ -1,2 +1,4 @@
 class Calc:
-    pass
+    def add(self, a, b):
+        return a + b
+
