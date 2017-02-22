@@ -1,11 +1,13 @@
 class SoBigException(Exception):
     pass
 
+class SoSmallException(Exception):
+    pass
 
 class Calc:
     MODE_NORMAL = 0
     MODE_VERBOSE = 1
-    WORD_NUM_MAP = {
+    WORD_TO_NUM = {
             'ZERO': 0,
             'ONE': 1,
             'TWO': 2,
@@ -18,21 +20,31 @@ class Calc:
             'NINE': 9,
             'TEN': 10,
     }
+    NUM_TO_WORD = dict(map(lambda p: (p[1], p[0]), WORD_TO_NUM.items()))
+
     def __init__(self, mode=MODE_NORMAL):
         self.mode = mode
 
     def add(self, a, b):
-        if self.mode == Calc.MODE_NORMAL:
-            return a + b
-        elif self.mode == Calc.MODE_VERBOSE:
-            a = Calc.WORD_NUM_MAP[a]
-            b = Calc.WORD_NUM_MAP[b]
-            rev_map = dict(map(lambda p: (p[1], p[0]), Calc.WORD_NUM_MAP.items()))
-            res = a + b
-            if res > 10:
-                raise SoBigException
-            return rev_map[res]
+        a, b = self.normalize(a), self.normalize(b)
+        res = a + b
+        if res > 10:
+            raise SoBigException
+        return self.normalize_res(res)
 
     def sub(self, a, b):
-        return a - b
+        a, b = self.normalize(a), self.normalize(b)
+        res = a - b
+        if res < 0:
+            raise SoSmallException
+        return self.normalize_res(res)
 
+    def normalize_res(self, val):
+        if self.mode == Calc.MODE_VERBOSE:
+            return Calc.NUM_TO_WORD[val]
+        return val
+
+    def normalize(self, val):
+        if self.mode == Calc.MODE_VERBOSE:
+            return Calc.WORD_TO_NUM[val]
+        return val

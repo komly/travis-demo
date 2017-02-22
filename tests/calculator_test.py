@@ -1,5 +1,5 @@
 import pytest
-from calculator import Calc, SoBigException
+from calculator import Calc, SoBigException, SoSmallException
 
 def test_calc():
     calc = Calc()
@@ -32,3 +32,12 @@ def test_calc_raises_exception_if_num_so_big():
     calc = Calc(mode=Calc.MODE_VERBOSE)
     with pytest.raises(SoBigException):
         calc.add('FIVE', 'SIX')
+
+def test_calc_verbose_can_sub():
+    calc = Calc(mode=Calc.MODE_VERBOSE)
+    assert calc.sub('THREE', 'ONE') == 'TWO'
+
+def test_calc_raises_exception_if_less_then_zero():
+    calc = Calc(mode=Calc.MODE_VERBOSE)
+    with pytest.raises(SoSmallException):
+        calc.sub('ONE', 'TWO')
