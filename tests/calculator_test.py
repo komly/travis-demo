@@ -12,3 +12,10 @@ def test_calc_can_add():
 def test_calc_can_sub():
     calc = Calc()
     assert calc.sub(4, 3) == 1
+
+def test_calc_verbose_mode():
+    calc = Calc()
+    assert calc.mode == calc.MODE_NORMAL
+    
+    calc = Calc(mode=Calc.MODE_VERBOSE)
+    assert calc.mode == calc.MODE_VERBOSE
